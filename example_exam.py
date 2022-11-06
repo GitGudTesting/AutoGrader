@@ -1,8 +1,6 @@
 import os
 import test_eval
 
-
-
 class Question1(test_eval.Question):
 
     def __init__(self):
@@ -35,44 +33,29 @@ class Question1(test_eval.Question):
 class Question2(test_eval.Question):
 
     def __init__(self):
-        self.name = 'fix_my_function'
-        self.total_points = 10
+        self.name = 'reduce_frequencies'
+        self.total_points = 20
         self.case_points = self.total_points / len(self.get_tests())
         self.exempted = []
 
-    def write_files(self):
-        lines = [
-            'price: 0',
-            'product: shoe',
-            'product: shoe, price: 5',
-            'product: umbrella, price: 5',
-            'price: 2, product: stroopwafels'
-        ]
-        for i, line in enumerate(lines):
-            with open(os.path.dirname(os.path.abspath(__file__)) +
-                      f'/test_files/single_order/order{i + 1}.txt', 'w') as fo:
-                fo.write(line)
-
-    def solution(self, filename):
-        with open(filename, 'r') as f:
-            x = f.read()
-        if 'price' in x:
-            if 'umbrella' in x:
-                return 'umbrella'
-            elif 'shoe' in x:
-                return 'shoe'
-            else:
-                return False
-        elif 'price' not in x and ('umbrella' in x or 'shoe' in x):
-            return 'no price'
+    def solution(self, worker_output):
+        frequencies = {}
+        for worker in worker_output:
+            for word, count in worker.items():
+                if word not in frequencies:
+                    frequencies[word] = count
+                else:
+                    frequencies[word] += count
+        if not frequencies:
+            return 0
         else:
-            return False
+            return max(frequencies.values())
 
     def get_tests(self):
         return [
-            (os.path.dirname(os.path.abspath(__file__)) + '/test_files/single_order/order1.txt'),
-            (os.path.dirname(os.path.abspath(__file__)) + '/test_files/single_order/order2.txt'),
-            (os.path.dirname(os.path.abspath(__file__)) + '/test_files/single_order/order3.txt'),
-            (os.path.dirname(os.path.abspath(__file__)) + '/test_files/single_order/order4.txt'),
-            (os.path.dirname(os.path.abspath(__file__)) + '/test_files/single_order/order5.txt')
+            ([{}]),
+            ([{'hello': 4, 'stuff': 1, 'things': 0, 'more': 10}]),
+            ([{'stuff': 2, 'more': 1}, {'stuff': 1, 'and': 1}]),
+            ([{'no': 0}]),
+            ([{'stuff': 1, 'more': 1}])
         ]
