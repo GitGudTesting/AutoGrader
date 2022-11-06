@@ -192,29 +192,14 @@ class Evaluator(object):
 def test_evals():
     script_dir = pathlib.Path(__file__).parent
     registry_result = Evaluator().run("example_exam.py","example_answers.py")
-    #print(registry_result)
-    nightmare = list(registry_result.values())
-    for index, x in enumerate(nightmare): #This is basically all the tests for each question.
-        print(x)
+    reg_vals = list(registry_result.values()) #This is making a list of each question to be ran through.
+    for index, x in enumerate(reg_vals): #This is basically all the tests for each question.
         for y in x.values(): #This is a log of each test that's in the question
-            #print(y)
-            assert y[0] == True #Basically asserting that every single question is correctamundo
-            #lookup_error(y[0])
-        #print(registry_result.values())
+            #print(y) #If you uncomment this you can see the log of each test
+            assert y[0] == True #This checks that every single question segment is true. And raises an assertion error if it is not.
 
-
-#def lookup_error(tester):
-#    try:
-#        assert tester == True, "Disaster"
-#    except AssertionError as error_assert:
-#        print("this is a nightmare: ", error_assert)
 
 
 if __name__ == "__main__":
-    #test = example_exam.Question2
-    #print(test)
-    test_evals()
-# if __name__ == "__main__":
-#     script_dir = pathlib.Path(__file__).parent
-#     Evaluator().run("example_exam.py","example_answers.py")
+    test_evals() #This is the main script that runs the autograder.
 
